@@ -12,14 +12,28 @@
     <header>
         <nav>
             <div class="light-buttons">
-                <div class="button-blue">
-                    <div class="button-blue-dark">
-                            <div class="button-blue-light-white"></div>
+                <div class="button-blue-dark">
+                    <div class="button-blue-before"></div>
+                    <div class="button-blue">
+                        <div class="button-blue-light-white"></div>
                     </div>
                 </div>
-                <div class="button-red">.</div>
-                <div class="button-yellow">.</div>
-                <div class="button-green">.</div>
+                <div class="button-red">.
+                    <div class="button-red-dark">
+                        <div class="button-red-dark-white"></div>
+                    </div>
+                </div>
+                <div class="button-yellow">
+                    <div class="button-yellow-gold">
+                        <div class="button-yellow-gold-white">
+                        </div>
+                    </div>
+                </div>
+                <div class="button-green">
+                    <div class="button-green-dark">
+                        <div class="button-green-dark-white"></div>
+                    </div>
+                </div>
             </div>
             <ul class="nav-list">
                 <li class="nav-item"> <button class="btn btn-header" id="see all"> Ver Todos</button></li>
@@ -46,29 +60,11 @@
     <main>
         <div id="Todos">
             <div class="pokemon-todos" id="listaPokemon">
-                <div class="pokemon">
-                    <p class="pokemon-id-back"> #025</p>
-                    <div class="pokemon-image">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
-                            alt="pikachu">
-
-                    </div>
-                    <div class="pokemon-info">
-                        <div class="nombre-contenedor">
-                            <p>#025</p>
-                            <h2>Pikachu</h2>
-
-                        </div>
-                        <div class="pokemon-tipos">
-                            <p class="electric tipo">ELECTRICO</p>
-                            <p class="fighting tipo">PELEADOR</p>
-                        </div>
-                        <div class="pokemon-stats">
-                            <p class="stat"> 4m</p>
-                            <p class="stat">60kg</p>
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div id="pokemonModal" class="modal">
+            <div class="Pokemon-content">
+                <!-- Content dynamically added by JavaScript -->
             </div>
         </div>
 

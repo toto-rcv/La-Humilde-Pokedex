@@ -1,52 +1,71 @@
-:root{
+:root {
 
-    --type-normal:#A8A878;
-    --type-fire:#F08030;
-    --type-water:#6890F0;
-    --type-electric:#F8D030;
-    --type-grass:#78C850;
-    --type-ice:#98D8D8;
-    --type-fighting:#C03028;
-    --type-poison:#A040A0;
-    --type-ground:#E0C068;
-    --type-flying:#A890F0;
-    --type-psychic:#F85888;
-    --type-bug:#A8B820;
-    --type-rock:#B8A038;
-    --type-ghost:#705898;
-    --type-dragon:#7038F8;
-    --type-dark:#705848;
+    --type-normal: #A8A878;
+    --type-fire: #F08030;
+    --type-water: #6890F0;
+    --type-electric: #F8D030;
+    --type-grass: #78C850;
+    --type-ice: #98D8D8;
+    --type-fighting: #C03028;
+    --type-poison: #A040A0;
+    --type-ground: #E0C068;
+    --type-flying: #A890F0;
+    --type-psychic: #F85888;
+    --type-bug: #A8B820;
+    --type-rock: #B8A038;
+    --type-ghost: #705898;
+    --type-dragon: #7038F8;
+    --type-dark: #705848;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-header{
+header {
     padding-block: 1rem;
-    box-shadow: 0 0 2rem -1rem rgba(0,0,0, .5);
+    box-shadow: 0 0 2rem -1rem rgba(0, 0, 0, .5);
+    background: linear-gradient(to bottom, #d13a3a, #8b071a);
+    /* Degradado de rojo a rojo oscuro */
 }
 
-.light-buttons{
+.light-buttons {
     display: flex;
     gap: 5rem;
     padding-bottom: 10px;
 }
 
-.button-blue{
-    background-color:#1a699e;
-    width:100px;
+.button-blue-dark {
+    background-color: #2f85fa;
+    width: 100px;
     height: 100px;
-    border-radius: 100vmax; 
+    border-radius: 100vmax;
     display: flex;
     align-items: center;
-    box-shadow: 10px 10px 10px rgba(0,0,0, .25);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .25);
+    overflow: hidden;
+    position: relative;
+    border: px solid black;
 }
 
-.button-blue-dark{
-   background-color: #2f85fa;
+.button-blue-dark::before {
+    content: "";
+    width: 100px;
+    height: 100px;
+    background-color: #1a699e;
+    border-radius: 50%;
+    position: absolute;
+    top: 7px;
+    /* Ajusta el tamaño de la curva interna */
+    left: 9px;
+    /* Ajusta la posición para dar el efecto creciente */
+}
+
+
+.button-blue {
+    background-color: #2f85fa;
     width: 50px;
     height: 50px;
     border-radius: 100vmax;
@@ -54,32 +73,176 @@ header{
     align-items: center;
     justify-content: center;
     margin: 35px 0px 65px 7px;
+    z-index: 1000;
 }
-.button-blue-light-white{
+
+.button-blue-light-white {
     background-color: rgb(218, 212, 212);
-    width:50%;
+    width: 50%;
     height: 50%;
     border-radius: 100vmax;
     margin: 0px 7px 10px 0px;
-} 
 }
 
-nav{
-    display:flex;
+.button-yellow {
+    background-color: #d4bd28ea;
+    width: 40px;
+    height: 40px;
+    border-radius: 100vmax;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .25);
+    overflow: hidden;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+}
+
+.button-yellow::before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    background-color: #b39f19;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    /* Ajusta el tamaño de la curva interna */
+    left: 5px;
+    /* Ajusta la posición para dar el efecto creciente */
+}
+
+.button-yellow-gold {
+    background-color: #d4bd28ea;
+    width: 20px;
+    height: 20px;
+    border-radius: 100vmax;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+    z-index: 1000;
+    /* Ahora funcionará correctamente */
+    margin: 0;
+}
+
+.button-yellow-gold-white {
+    background-color: rgb(218, 212, 212);
+    width: 50%;
+    height: 50%;
+    border-radius: 100vmax;
+    margin: 3px 0px 0px 3px;
+    z-index: 1000;
+}
+
+.button-red {
+    background-color: #e12748;
+    width: 40px;
+    height: 40px;
+    border-radius: 100vmax;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .25);
+    overflow: hidden;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+}
+
+.button-red::before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    background-color: #8b071a;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    /* Ajusta el tamaño de la curva interna */
+    left: 5px;
+    /* Ajusta la posición para dar el efecto creciente */
+}
+
+.button-red-dark {
+    background-color: #e12748;
+    width: 20px;
+    height: 20px;
+    border-radius: 100vmax;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+    z-index: 1000;
+    /* Ahora funcionará correctamente */
+    margin: 0;
+    bottom: 15px;
+}
+
+.button-red-dark-white {
+    background-color: rgb(218, 212, 212);
+    width: 50%;
+    height: 50%;
+    border-radius: 100vmax;
+    z-index: 1000;
+}
+
+.button-green {
+    background-color: #6fb67c;
+    width: 40px;
+    height: 40px;
+    border-radius: 100vmax;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .25);
+    overflow: hidden;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+}
+
+.button-green::before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    background-color: #36693c;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    /* Ajusta el tamaño de la curva interna */
+    left: 5px;
+    /* Ajusta la posición para dar el efecto creciente */
+}
+
+.button-green-dark {
+    background-color: #6fb67c;
+    width: 20px;
+    height: 20px;
+    border-radius: 100vmax;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Agregado para habilitar el z-index de los hijos */
+    z-index: 1000;
+    margin: 2px 0px 0px 1px;
+}
+
+.button-green-dark-white {
+    background-color: rgb(218, 212, 212);
+    width: 50%;
+    height: 50%;
+    border-radius: 100vmax;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
     padding-inline: 1rem;
+
 }
 
-.nav-list{
+.nav-list {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap:.5rem;
+    gap: .5rem;
 }
 
-.btn-header{
+.btn-header {
     background-color: var(--type-normal);
     color: white;
     padding: .5rem 1rem;
@@ -87,90 +250,425 @@ nav{
     text-transform: uppercase;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 0 1rem rgba(0,0,0, .25);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
 }
 
-body{
+body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0f0f0;
 }
-ul{
-    list-style-type:none;
+
+ul {
+    list-style-type: none;
 }
 
-button{
+button {
     background-color: transparent;
     border: 0;
     border-radius: 0;
 }
 
-.pokemon-image{
+.pokemon-image {
     width: 100%;
     height: auto;
 }
 
-.normal{
+.normal {
     background-color: var(--type-normal);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.fire{
+.fire {
     background-color: var(--type-fire);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.water{
+.water {
     background-color: var(--type-water);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.electric{
+.electric {
     background-color: var(--type-electric);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.grass{
+.grass {
     background-color: var(--type-grass);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.ice{
+.ice {
     background-color: var(--type-ice);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.fighting{
+.fighting {
     background-color: var(--type-fighting);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.poison{
+.poison {
     background-color: var(--type-poison);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.ground{
+.ground {
     background-color: var(--type-ground);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.flying{
+.flying {
     background-color: var(--type-flying);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.psychic{
+.psychic {
     background-color: var(--type-psychic);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.bug{
+.bug {
     background-color: var(--type-bug);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.rock{
+.rock {
     background-color: var(--type-rock);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.ghost{
+.ghost {
     background-color: var(--type-ghost);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.dragon{
+.dragon {
     background-color: var(--type-dragon);
+    border-radius: 100vmax;
+    text-align: center;
 }
 
-.dark{
+.dark {
     background-color: var(--type-dark);
+    border-radius: 100vmax;
+    text-align: center;
+}
+
+.pokemon-id-back {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.Pokemon-content {
+
+    width: 75%;
+
 }
 
 
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 2s ease;
+}
+
+.modal-body {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 2s;
+}
+
+.modal-body img {
+    width: 200px;
+    height: auto;
+}
+
+.modal-body h2 {
+    margin: 1rem 0;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+    padding: 5px;
+
+}
+
+.modal-body-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.pokemon-characteristics {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+}
+
+
+
+.characteristics-for-pokemons {
+    background-color: #f0f0f0;
+    border-radius: 0px 0px 10px 10px;
+    padding: 1rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1rem;
+    animation: fadeIn 2s;
+    transition: all 0.3s ease-in-out;
+    font-size: larger;
+    padding-right: 2rem;
+}
+
+.characteristics-for-pokemons:hover {
+    box-shadow: 0 0 2rem rgba(0, 0, 0, .5);
+}
+
+.characteristics-for-pokemons h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+
+}
+
+.caracteristics-pokemon {
+    border: 1px solid #ccc;
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    display: flex;
+    padding-left: 1rem;
+    height: 2rem;
+    align-items: center;
+}
+
+.content-header-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5rem;
+    gap: 1rem;
+    /* Add spacing between child elements */
+}
+
+.header-modal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align to the left */
+    width: 100%;
+    /* Ensure it spans the full width */
+}
+
+
+.content-name-header-modal {
+    text-align: center;
+    /* Center the text */
+    margin: 0 auto;
+    /* Center the container */
+}
+
+.generos {
+    max-width: 2rem;
+}
+
+.container-characteristics {
+    margin-bottom: 1rem;
+    animation: fadeIn 2s;
+    transition: all 0.3s ease-in-out;
+    border-radius: 100vmax;
+}
+
+.container-characteristics:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 2rem rgba(0, 0, 0, .5);
+}
+
+.pokemon-types {
+    display: flex;
+    gap: 1rem;
+    border-radius: 100vmax;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.pokemon-types p {
+    border: 1px solid #ccc;
+    border-radius: 100vmax;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.pokemon-types p:hover {
+    box-shadow: 0 0 2rem rgba(0, 0, 0, .5);
+    transition: all 0.3s ease-in-out;
+}
+
+.container-types{
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-evenly;;
+    gap: 1rem;
+}
+
+.stats-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0; /* Light gray background */
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-fill {
+    height: 100%;
+    background-color: #4caf50; /* Static green background indicating percentage */
+    width: calc(var(--stat-percentage, 0) * 1%);
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.stat-fill::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #66bb6a, #4caf50, #66bb6a, transparent);
+    background-size: 200% 100%;
+    animation: gradientSweep 4s linear infinite;
+}
+
+@keyframes gradientSweep {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.pokemon-evolutions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.pokemon-evolutions .evolution {
+    text-align: center;
+}
+
+.pokemon-evolutions img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Make the modal responsive */
+@media (max-width: 768px) {
+    .modal-body-content {
+        flex-direction: column;
+        /* Stack content vertically */
+        align-items: center;
+    }
+
+    .content-header-modal {
+        flex-direction: column;
+        /* Stack header content vertically */
+        gap: 2rem;
+    }
+
+    .header-modal {
+        flex-direction: column;
+        /* Stack elements vertically */
+        align-items: center;
+    }
+
+    .header-modal img {
+        margin: 0 auto;
+        /* Center the image */
+    }
+
+    .pokemon-characteristics {
+        width: 100%;
+        /* Adjust width for smaller screens */
+    }
+
+    .modal-body {
+        width: 90%;
+        /* Adjust modal width for smaller screens */
+        padding: 1rem;
+    }
+}
