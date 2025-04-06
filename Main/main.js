@@ -19,8 +19,8 @@ function obtenerColorDeFondo(types) {
     const rootStyles = getComputedStyle(document.documentElement);
     const colors = types.map(type => rootStyles.getPropertyValue(`--type-${type.type.name}`));
     return colors.length > 1
-        ? `linear-gradient(to bottom, ${colors[0]}, ${colors[1]})`
-        : colors[0];
+        ? `linear-gradient(to bottom, ${colors[0]},${colors[1]})`
+        : `linear-gradient(to bottom, ${colors[0]} 50%, rgba(0, 0, 0, 0.8) 100%)`; // Oscurece después del 50%
 }
 
 // Función para obtener un color más oscuro para las características del Pokémon
@@ -72,6 +72,16 @@ async function obtenerEvoluciones(pokemonId) {
     return evoluciones;
 }
 
+// Función para obtener la descripción del Pokémon
+async function obtenerDescripcion(pokemonId) {
+    const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}/`);
+    const speciesData = await speciesResponse.json();
+
+    // Buscar la descripción en español
+    const descripcion = speciesData.flavor_text_entries.find(entry => entry.language.name === 'es');
+    return descripcion ? descripcion.flavor_text.replace(/\n|\f/g, ' ') : 'No hay informacion de este Pokemon.';
+}
+
 // Función para abrir el modal del Pokémon
 // Muestra información detallada del Pokémon en un modal
 async function openPokemonModal(data) {
@@ -83,10 +93,13 @@ async function openPokemonModal(data) {
     const evoluciones = await obtenerEvoluciones(data.id);
     const evolucionesHtml = evoluciones.map(evo => `
         <div class="evolution">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" alt="${evo.name}">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" alt="${evo.name}" style="width: 100px; height: 100px;">
             <p>${evo.name.charAt(0).toUpperCase() + evo.name.slice(1)}</p>
         </div>
     `).join('');
+
+    // Obtener descripción
+    const descripcion = await obtenerDescripcion(data.id);
 
     modalContent.innerHTML = `
     <div class="modal-body">
@@ -112,22 +125,29 @@ async function openPokemonModal(data) {
                 </div>
             </div>
            <div class="pokemon-types">
-           <div class="container-types">
+           <div class="container-types" style="justify-content: ${data.types.length > 1 ? 'space-between' : 'center'};">
            ${data.types.map(type => `<p class="${type.type.name} tipo">${type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</p>`).join('')}
            </div>
-           <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}">
+           <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}" class="pokemon-image-modal">
+           <div class="pokeball-container">
+               <img src="/img/pngwing.com.png" alt="pokeball" class="pokeball">
            </div>
-            <div class="pokemon-types">
-                <div class="pokemon-evolutions">
-                    ${evolucionesHtml}
+           </div>
+            <div class="pokemon-stats">
+                <h3>Estadisticas</h3>
+                <div class="stats-container">
+                    ${generarStats(data.stats)}
                 </div>
             </div>
         </div>
+        <div class="pokemon-description" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
+            <h3>Informacion</h3>
+            <p>${descripcion}</p>
+        </div>
         <div class="modal-footer">
-            <div class="pokemon-stats">
-                <h3>Stats</h3>
-                <div class="stats-container">
-                    ${generarStats(data.stats)}
+            <div class="pokemon-types">
+                <div class="pokemon-evolutions" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
+                    ${evolucionesHtml}
                 </div>
             </div>
         </div>
@@ -146,46 +166,43 @@ async function openPokemonModal(data) {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
+    
+    // Reproducir el sonido del Pokémon al hacer clic en su imagen
+    const pokemonImage = modal.querySelector('.pokemon-image-modal');
+    pokemonImage.addEventListener('click', () => {
+        const audio = new Audio(`https://play.pokemonshowdown.com/audio/cries/${data.name.toLowerCase()}.mp3`);
+        audio.play();
+    });
 }
 
 // Función para generar los stats en español
 function generarStats(stats) {
     const nombresStats = {
-        hp: "Puntos de Salud",
+        hp: "HP",
         attack: "Ataque",
         defense: "Defensa",
-        "special-attack": "Ataque Especial",
-        "special-defense": "Defensa Especial",
+        "special-attack": "At. Especial",
+        "special-defense": "Def. Especial",
         speed: "Velocidad"
     };
 
-    // Divide stats into two columns with progress bars
-    const column1 = stats.slice(0, 3).map(stat => `
+    const coloresStats = {
+        hp: "#f10801",
+        attack: "#f47f30",
+        defense: "#f8cf32",
+        "special-attack": "#6690ed",
+        "special-defense": "#7ac74d",
+        speed: "#fd558b"
+    };
+
+    return stats.map(stat => `
         <div class="stat-item">
             <p>${nombresStats[stat.stat.name] || stat.stat.name}: ${stat.base_stat}</p>
             <div class="stat-bar">
-                <div class="stat-fill" style="width: ${(stat.base_stat / 200) * 100}%;"></div>
+                <div class="stat-fill" style="width: ${(stat.base_stat / 200) * 100}%; background-color: ${coloresStats[stat.stat.name] || '#4caf50'};"></div>
             </div>
         </div>
     `).join('');
-
-    const column2 = stats.slice(3).map(stat => `
-        <div class="stat-item">
-            <p>${nombresStats[stat.stat.name] || stat.stat.name}: ${stat.base_stat}</p>
-            <div class="stat-bar">
-                <div class="stat-fill" style="width: ${(stat.base_stat / 200) * 100}%;"></div>
-            </div>
-        </div>
-    `).join('');
-
-    return `
-        <div class="stats-column">
-            ${column1}
-        </div>
-        <div class="stats-column">
-            ${column2}
-        </div>
-    `;
 }
 
 // Función para mostrar las tarjetas de los Pokémon
