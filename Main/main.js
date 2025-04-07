@@ -69,7 +69,7 @@ async function obtenerEvoluciones(pokemonId) {
         currentEvolution = currentEvolution.evolves_to[0];
     }
 
-    return evoluciones;
+    return evoluciones.length > 1 ? evoluciones : []; // Devuelve un array vacío si no hay evoluciones
 }
 
 // Función para obtener la descripción del Pokémon
@@ -87,10 +87,12 @@ async function obtenerDescripcion(pokemonId) {
 async function openPokemonModal(data) {
     const modal = document.getElementById('pokemonModal');
     const modalContent = modal.querySelector('.Pokemon-content');
+    const screenWidth = window.innerWidth;
+
     let types = data.types.map(type => `<p class="${type.type.name} tipo">${type.type.name}</p>`).join('');
 
     // Obtener evoluciones
-    const evoluciones = await obtenerEvoluciones(data.id);
+    const evoluciones = (await obtenerEvoluciones(data.id)).filter(evo => parseInt(evo.id) <= 151);
     const evolucionesHtml = evoluciones.map(evo => `
         <div class="evolution">
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" alt="${evo.name}" style="width: 100px; height: 100px;">
@@ -98,60 +100,118 @@ async function openPokemonModal(data) {
         </div>
     `).join('');
 
+    // Hide the evolution div if no evolutions are available
+    const evolutionDivStyle = evoluciones.length === 0 ? 'display: none;' : '';
+
     // Obtener descripción
     const descripcion = await obtenerDescripcion(data.id);
 
-    modalContent.innerHTML = `
-    <div class="modal-body">
-        <span class="close-modal">&times;</span>
-        <div class="content-header-modal" style="border-bottom: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};"> 
-            <div class="header-modal">
-                <p class="pokemon-id-back">N.°${data.id.toString().padStart(3, '0')}</p>
-                <div class="content-name-header-modal"> 
-                    <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
+    switch (true) {
+        case screenWidth > 1200:
+            modalContent.innerHTML = `
+            <div class="modal-body">
+                <span class="close-modal">&times;</span>
+                <div class="content-header-modal" style="border-bottom: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};"> 
+                    <div class="header-modal">
+                        <p class="pokemon-id-back">N.°${data.id.toString().padStart(3, '0')}</p>
+                        <div class="content-name-header-modal"> 
+                            <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
+                        </div>
+                        <img src="/img/genero.png" alt="generos" class="generos">
+                    </div> 
+                </div> 
+                <div class="modal-body-content">
+                    <div class="pokemon-characteristics">
+                        <div class="container-characteristics">
+                            <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Altura</p>
+                            <p class="characteristics-for-pokemons">${data.height / 10} m</p>
+                        </div>    
+                        <div class="container-characteristics">
+                            <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Peso</p>
+                            <p class="characteristics-for-pokemons">${data.weight / 10} kg</p>
+                        </div>
+                    </div>
+                   <div class="pokemon-types">
+                   <div class="container-types" style="justify-content: ${data.types.length > 1 ? 'space-between' : 'center'};">
+                   ${data.types.map(type => `<p class="${type.type.name} tipo">${type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</p>`).join('')}
+                   </div>
+                   <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}" class="pokemon-image-modal">
+                   <div class="pokeball-container">
+                       <img src="/img/pngwing.com.png" alt="pokeball" class="pokeball">
+                   </div>
+                   </div>
+                    <div class="pokemon-stats">
+                        <h3>Estadisticas</h3>
+                        <div class="stats-container">
+                            ${generarStats(data.stats)}
+                        </div>
+                    </div>
                 </div>
-                <img src="/img/genero.png" alt="generos" class="generos">
-            </div> 
-        </div> 
-        <div class="modal-body-content">
-            <div class="pokemon-characteristics">
-                <div class="container-characteristics">
-                    <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Altura</p>
-                    <p class="characteristics-for-pokemons">${data.height / 10} m</p>
-                </div>    
-                <div class="container-characteristics">
-                    <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Peso</p>
-                    <p class="characteristics-for-pokemons">${data.weight / 10} kg</p>
+                <div class="modal-footer">
+                    <div class="pokemon-types">
+                        <div class="pokemon-evolutions" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; ${evolutionDivStyle}">
+                            ${evolucionesHtml}
+                        </div>
+                    </div>
                 </div>
-            </div>
-           <div class="pokemon-types">
-           <div class="container-types" style="justify-content: ${data.types.length > 1 ? 'space-between' : 'center'};">
-           ${data.types.map(type => `<p class="${type.type.name} tipo">${type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</p>`).join('')}
-           </div>
-           <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}" class="pokemon-image-modal">
-           <div class="pokeball-container">
-               <img src="/img/pngwing.com.png" alt="pokeball" class="pokeball">
-           </div>
-           </div>
-            <div class="pokemon-stats">
-                <h3>Estadisticas</h3>
-                <div class="stats-container">
-                    ${generarStats(data.stats)}
+                <div class="pokemon-description" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
+                    <h3>Informacion</h3>
+                    <p>${descripcion}</p>
                 </div>
-            </div>
-        </div>
-        <div class="pokemon-description" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
-            <h3>Informacion</h3>
-            <p>${descripcion}</p>
-        </div>
-        <div class="modal-footer">
-            <div class="pokemon-types">
-                <div class="pokemon-evolutions" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
-                    ${evolucionesHtml}
+            </div>`;
+            break;
+
+        case screenWidth <= 900:
+            modalContent.innerHTML = `
+            <div class="modal-body">
+                <span class="close-modal">&times;</span>
+                <div class="content-header-modal" style="border-bottom: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};"> 
+                    <div class="header-modal">
+                        <p class="pokemon-id-back">N.°${data.id.toString().padStart(3, '0')}</p>
+                        <div class="content-name-header-modal"> 
+                            <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
+                        </div>
+                         <img src="/img/genero.png" alt="generos" class="generos">
+                    </div> 
+                </div> 
+                <div class="modal-body-content">
+                    <div class="pokemon-characteristics">
+                        <div class="container-characteristics">
+                            <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Altura</p>
+                            <p class="characteristics-for-pokemons">${data.height / 10} m</p>
+                        </div>    
+                        <div class="container-characteristics">
+                            <p class="caracteristics-pokemon" style="background: ${obtenerColorDeFondoCaracteristicas(data.types)};">Peso</p>
+                            <p class="characteristics-for-pokemons">${data.weight / 10} kg</p>
+                        </div>
+                    </div>
+                <div class="pokemon-and-evolutions">
+                  <div class="pokemon-types">
+                   <div class="types-pokemon-top">
+                       <div class="container-types" style="justify-content: ${data.types.length > 1 ? 'space-between' : 'center'};">
+                       ${data.types.map(type => `<p class="${type.type.name} tipo">${type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</p>`).join('')}
+                       </div>
+                       <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}" class="pokemon-image-modal">
+                   </div>
+                    <div class="pokemon-evolutions" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; ${evolutionDivStyle}">
+                        ${evolucionesHtml}
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>`;
+                   </div>
+                    <div class="pokemon-stats">
+                        <h3>Estadisticas</h3>
+                        <div class="stats-container">
+                            ${generarStats(data.stats)}
+                        </div>
+                    </div>
+                </div>
+                <div class="pokemon-description" style="border-left: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)}; border-right: 3px solid ${obtenerColorDeFondoCaracteristicas(data.types)};">
+                    <h3>Informacion</h3>
+                    <p>${descripcion}</p>
+                </div>
+            </div>`;
+            break;
+    }
 
     // Establecer el color de fondo dinámico
     const modalBody = modal.querySelector('.modal-body');
@@ -166,7 +226,7 @@ async function openPokemonModal(data) {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
-    
+
     // Reproducir el sonido del Pokémon al hacer clic en su imagen
     const pokemonImage = modal.querySelector('.pokemon-image-modal');
     pokemonImage.addEventListener('click', () => {
@@ -215,7 +275,7 @@ function mostrarPokemon(data) {
     div.innerHTML = `
        <p class="pokemon-id-back">#${data.id.toString().padStart(3, '0')}</p>
        <div class="pokemon-image">
-           <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}">
+           <img src="${data.sprites["front_default"]}" alt="${data.name}">
        </div>
        <div class="pokemon-info">
            <div class="nombre-contenedor">
@@ -234,4 +294,3 @@ function mostrarPokemon(data) {
     div.addEventListener('click', () => openPokemonModal(data));
     listaPokemon.appendChild(div);
 }
-
